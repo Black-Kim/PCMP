@@ -20,41 +20,37 @@ public class WorkerDao {
 	
 	private JDBCUtil jdbc = JDBCUtil.getInstance();
 	
-	public int insertUser(Map<String, Object> p){ //회원 가입
-		String sql = "INSERT INTO TB_JDBC_USER VALUES (?, ?, ?)";
-		
-		List<Object> param = new ArrayList<>();
-		param.add(p.get("USER_ID"));
-		param.add(p.get("PASSWORD"));
-		param.add(p.get("USER_NAME"));
-		
-		return jdbc.update(sql, param);
-	}
-	
 	public int insertAdmin(Map<String, Object> p){ //관리자 가입
-		String sql = "INSERT INTO TB_JDBC_USER VALUES (?, ?, ?)";
+		String sql = "INSERT INTO PM_WK_T VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		
 		List<Object> param = new ArrayList<>();
-		param.add(p.get("USER_ID"));
+		
+		param.add(p.get("WORK_ID"));
+		param.add(p.get("REG_NO"));
+		param.add(p.get("Name"));
 		param.add(p.get("PASSWORD"));
-		param.add(p.get("USER_NAME"));
+		param.add(p.get("HP"));
+		param.add(p.get("EMAIL"));
+		param.add(p.get("ADDR"));
+		param.add(p.get("SAL"));
+		param.add(p.get("CODE"));
 		
 		return jdbc.update(sql, param);
 	}
 
-	public Map<String, Object> selectUser(String userId, String password) {
-		String sql = "SELECT USER_ID, USER_NAME" +
-	                 " FROM TB_JDBC_USER" +
-				     " WHERE USER_ID = ?" +
-	                 " AND PASSWORD = ?";
+	public Map<String, Object> selectAdmin(String workId, String password) {
+		String sql = "SELECT WORK_ID, PASS, code" +
+	                 " FROM PM_WK_T" +
+				     " WHERE WORK_ID = ?" +
+	                 " AND PASS = ?";
 		List<Object> param = new ArrayList<>();
-		param.add(userId);
+		param.add(workId);
 		param.add(password);
 		return jdbc.selectOne(sql, param);
 	}
 
 	public Map<String, Object> finduser(String string, Object userId) {
-		String sql = "SELECT * FROM TB_JDBC_USER WHERE USER_ID = ?";
+		String sql = "SELECT * FROM PM_WK_T WHERE WORK_ID = ?";
 		List<Object> param = new ArrayList<>();
 		param.add(userId);
 		return jdbc.selectOne(sql, param);

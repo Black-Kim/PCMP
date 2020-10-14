@@ -29,17 +29,17 @@ public class UserService {
 		System.out.println("아이디 >"); //중복체크, 정규표현식으로 유효성 체크
 		String cusId = ScanUtil.nextLine();
 		Map<String, Object> user = new HashMap<>();
-		user = userDao.finduser("USER_ID",(Object)cusId);
+		user = userDao.finduser("CUS_ID",(Object)cusId);
 		if(user == null){
 			power = false;
 		}else {
-			power = user.get("USER_ID").equals(cusId);
+			power = user.get("CUS_ID").equals(cusId);
 			System.out.println("동일한 아이디가 존재합니다.\n새로운 아이디를 적어주세요.");
 		}
 		while(power == true){
 			cusId = ScanUtil.nextLine();
 			user = new HashMap<>();
-			user = userDao.finduser("USER_ID",(Object)cusId);
+			user = userDao.finduser("CUS_ID",(Object)cusId);
 			
 			if(user == null){
 				String id = "(\\w|-|_){5,20}+";
@@ -70,9 +70,9 @@ public class UserService {
 			
 		System.out.println("이름 >");
 		String Name = ScanUtil.nextLine();
-		System.out.println("이름 >");
-		int Hp = ScanUtil.nextInt();
-		System.out.println("이름 >");
+		System.out.println("연락처 >");
+		String Hp = ScanUtil.nextLine();
+		System.out.println("이메일 >");
 		String Email = ScanUtil.nextLine();
 		
 		Map<String, Object> param = new HashMap<>();
