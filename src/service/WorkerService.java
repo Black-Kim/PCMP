@@ -117,7 +117,7 @@ public class WorkerService {
 			System.out.println(admin);
 			Controller.loginAdmin = admin;
 
-			return View.BOARD_LIST;
+			return View.SELECT_LIST;
 		
 		}else{
 		

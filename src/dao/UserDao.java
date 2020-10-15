@@ -1,15 +1,13 @@
 package dao;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import service.UserService;
 import util.JDBCUtil;
 
 public class UserDao {
-
+	
 	private UserDao(){}
 	private static UserDao instance;
 	public static UserDao getInstance(){
@@ -18,11 +16,12 @@ public class UserDao {
 		}
 		return instance;
 	}
+	
 	private JDBCUtil jdbc = JDBCUtil.getInstance();
 	
-	public int insertUser(Map<String, Object> p){ //회원 가입
+	public int insertUser(Map<String, Object> p){
 		String sql = "INSERT INTO PM_CUS_T VALUES (?, ?, ?, ?, ?, ?)";
-		
+
 		List<Object> param = new ArrayList<>();
 
 		param.add(p.get("CUS_ID"));
@@ -31,16 +30,14 @@ public class UserDao {
 		param.add(p.get("HP"));
 		param.add(p.get("FIX_TIME"));
 		param.add(p.get("EMAIL"));
-		
+
 		return jdbc.update(sql, param);
+
 	}
-	
 
 	public Map<String, Object> selectUser(String userId, String password) {
-		String sql = "SELECT CUS_ID, PASS" +
-	                 " FROM PM_CUS_T" +
-				     " WHERE CUS_ID = ?" +
-	                 " AND PASS = ?";
+		String sql = "SELECT CUS_ID, PASS" + " FROM PM_CUS_T"
+				+ " WHERE CUS_ID = ?" + " AND PASS = ?";
 		List<Object> param = new ArrayList<>();
 		param.add(userId);
 		param.add(password);
@@ -53,8 +50,21 @@ public class UserDao {
 		param.add(userId);
 		return jdbc.selectOne(sql, param);
 	}
-
-	
-	
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

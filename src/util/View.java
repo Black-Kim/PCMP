@@ -13,6 +13,8 @@ public class View {
 	public static final int BOARD_LIST = 5;
 	public static final int BOARD_VIEW = 6;
 	public static final int BOARD_INSERT_FROM = 7;
-	
+	public static final int SELECT_LIST = 8;
+	//마이페이지
+	public static final int MY_PAGE = 9;
 	
 }

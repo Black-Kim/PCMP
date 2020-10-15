@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import controller.Controller;
 import util.JDBCUtil;
+import util.ScanUtil;
 
 public class BoardDao {
+	
 	private BoardDao(){}
 	private static BoardDao instance;
 	public static BoardDao getInstance(){
@@ -18,59 +21,147 @@ public class BoardDao {
 	
 	private JDBCUtil jdbc = JDBCUtil.getInstance();
 	
-	
 	public List<Map<String, Object>> selectBoardList(){
-		String sql = "SELECT A.BOARD_NO, A.TITLE, A.CONTENT, B.USER_NAME, A.REG_DATE" +
-					 " FROM TB_JDBC_BOARD A" +
-					 " LEFT OUTER JOIN TB_JDBC_USER B" +
-					 " ON A.USER_ID = B.USER_NAME" +
-					 " ORDER BY A.BOARD_NO DESC";
-		
+		String sql = "SELECT BOR_NO, BOR_DATE, BOR_COMT, TITLE , BOR_CHECK, CONT, B.NAME" +
+				 " FROM PM_BD_T A" +
+				 " , PM_CUS_T B" +
+				 " WHERE A.CUS_ID = B.CUS_ID" +
+				 " ORDER BY BOR_NO DESC";
+	
 		return jdbc.selectList(sql);	
+		
 	}
-
-
-	public int create(Map<String, Object> p) {
-		int num = 0;
-		String sql = "select NVL(MAX(board_no),0)+1 BB from tb_jdbc_board";
-		Map<String, Object> num1 = jdbc.selectOne(sql);
-		System.out.println(num1);
-		sql = "insert into tb_jdbc_board VALUES (?,?,?,?,SYSDATE)";
+	
+	
+	public int insertBoardList(){
+		String sql = "SELECT NVL(MAX(BOR_NO),0)+1 MAXNUM FROM PM_BD_T";
+		
+		Map<String, Object> num = jdbc.selectOne(sql);
+	
+	
 		List<Object> param = new ArrayList<>();
-		param.add(num1.get("BB"));
-		param.add(p.get("TITLE"));
-		param.add(p.get("CONTENT"));
-		param.add(p.get("USER_NAME"));
+		
+		
+		
+		System.out.print("등록 메뉴 : 1.음식주문\t2.애로사항등록\n입력");
+		int input = ScanUtil.nextInt();
+		String title = " ";
+		while (title.equals(" ")) {
+			switch (input) {
+			case 1:
+				title = "음식주문";
+				break;
+
+			case 2:
+				title = "애로사항";
+				break;
+
+			default:
+				System.out.println("1,2번만 선택하세요");
+				break;
+			}
+		}
+		System.out.println("내용을 입력해주세요");
+		String content = ScanUtil.nextLine();
+		
+		sql = "INSERT INTO PM_BD_T VALUES(?,SYSDATE,?,?,?,?,?)";
+		param.add(num.get("MAXNUM"));
+		param.add(" ");
+		param.add(" ");
+		param.add(content);
+		param.add(title);
+		param.add(Controller.LoginUser.get("CUS_ID"));
+		
 		
 		
 		return jdbc.update(sql, param);
+		
+		
+	}
+	
+	
+	public Map<String, Object> selectList(int num){
+
+		
+		String sql = "SELECT BOR_NO, BOR_DATE, BOR_COMT, TITLE , BOR_CHECK, CONT, B.NAME" +
+				 " FROM PM_BD_T A" +
+				 " , PM_CUS_T B" +
+				 " WHERE A.CUS_ID = B.CUS_ID AND BOR_NO = ? ";
+		
+		List<Object> param = new ArrayList<>();
+		param.add(num);
+		
+	
+		return jdbc.selectOne(sql,param);
+		
 	}
 
-	public Map<String, Object> jo(Map<String, Object> p) {
-		String sql = "SELECT COUNT(*) FROM tb_jdbc_board WHERE BOARD_NO = ?";
+
+	public int deleteBoardList(int num) {
 		List<Object> param = new ArrayList<>();
-		param.add(p.get("BOARD_NO"));
-		return jdbc.selectOne(sql, param);
+		
+		String sql = "SELECT USER_ID FROM TB_JDBC_BOARD WHERE BOARD_NO = ?";
+		param.add(num);
+		
+		Map<String, Object> name = jdbc.selectOne(sql,param);
+		
+
+		
+		if(Controller.LoginUser.get("USER_NAME").equals(name.get("USER_ID")) ){
+		
+		sql = "DELETE TB_JDBC_BOARD WHERE BOARD_NO = ?";
+
+			System.out.println("삭제되었습니다.");
+
+			return jdbc.update(sql, param);
+		} else {
+			System.out.println("작성자 본인이 아닙니다.");
+			return 0;
+		}
 	}
 
 
-	public int delete(Map<String, Object> p) {
-		String sql = "delete tb_jdbc_board where board_no = ?";
-		List<Object> param = new ArrayList<>();
-		param.add(p.get("BOARD_NO"));
-		return jdbc.update(sql, param);
-	}
+	public int updateBoardList(int num) {
+		List<Object> param1 = new ArrayList<>();
+		
+		String sql = "SELECT USER_ID FROM TB_JDBC_BOARD WHERE BOARD_NO = ?";
+		param1.add(num);
+		
+		
+		Map<String, Object> name = jdbc.selectOne(sql,param1);
 
-
-	public int update(Map<String, Object> p) {
-		String sql = "update tb_jdbc_board set title = ?, content = ? where board_no = ?";
+		if(Controller.LoginUser.get("USER_NAME").equals(name.get("USER_ID"))  ){
+		
+		System.out.println("수정할 제목 입력");
+		String title = ScanUtil.nextLine();
+		System.out.println("수정할 내용 입력");
+		String content = ScanUtil.nextLine();
+		
+		sql = "UPDATE TB_JDBC_BOARD SET TITLE = ?, CONTENT = ? WHERE BOARD_NO = ?";
 		List<Object> param = new ArrayList<>();
-		param.add(p.get("TITLE"));
-		param.add(p.get("CONTENT"));
-		param.add(p.get("BOARD_NO"));
+		param.add(title);
+		param.add(content);
+		param.add(num);
+		
+		System.out.println("수정되었습니다.");
 		
 		return jdbc.update(sql, param);
+		}else{
+			System.out.println("작성자 본인이 아닙니다");
+			return 0;
+			
+		}
 	}
-
-
+	
 }
+
+
+
+
+
+
+
+
+
+
+

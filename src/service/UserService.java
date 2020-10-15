@@ -1,6 +1,5 @@
 package service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -94,24 +93,46 @@ public class UserService {
 	}
 
 	public int login() {
-		System.out.println("============ 로그인 ===========");
-		System.out.println("아이디 >");
+		System.out.println("================ 로그인 ================");
+		System.out.print("아이디>");
 		String userId = ScanUtil.nextLine();
-		System.out.println("패스워드 >");
+		System.out.print("비밀번호>");
 		String password = ScanUtil.nextLine();
 		
-		Map<String, Object> user = userDao.selectUser(userId, password);
+		Map<String,Object> user = userDao.selectUser(userId, password);
 		
 		if(user == null){
 			System.out.println("아이디 혹은 비밀번호를 잘못 입력하셨습니다.");
 		}else{
 			System.out.println("로그인 성공");
 			
-			Controller.loginUser = user;
+			Controller.LoginUser = user;
 			
-			return View.BOARD_LIST;
+			return View.SELECT_LIST;
 		}
+		
 		return View.LOGIN;
+		
 	}
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
