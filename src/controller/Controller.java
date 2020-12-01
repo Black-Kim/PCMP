@@ -116,7 +116,7 @@ public class Controller {
 
 	private int home() {
 		boolean power;
-		//System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+		System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
 		System.out.println("■――――――――――――――――――――――――――――――――――――■");
 		System.out.println("■       수선호 PC방 에 오신걸 환영합니다           ■");
 		System.out.println("■                                    ■");
