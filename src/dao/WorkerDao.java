@@ -8,23 +8,26 @@ import service.WorkerService;
 import util.JDBCUtil;
 
 public class WorkerDao {
-	
-	private WorkerDao(){}
+
+	private WorkerDao() {
+	}
+
 	private static WorkerDao instance;
-	public static WorkerDao getInstance(){
-		if(instance == null){
+
+	public static WorkerDao getInstance() {
+		if (instance == null) {
 			instance = new WorkerDao();
 		}
 		return instance;
 	}
-	
+
 	private JDBCUtil jdbc = JDBCUtil.getInstance();
-	
-	public int insertAdmin(Map<String, Object> p){ //관리자 가입
-		String sql = "INSERT INTO PM_WK_T VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		
+
+	public int insertAdmin(Map<String, Object> p) { // 관리자 가입
+		String sql = "INSERT INTO PM_WORKER VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
 		List<Object> param = new ArrayList<>();
-		
+
 		param.add(p.get("WORK_ID"));
 		param.add(p.get("REG_NO"));
 		param.add(p.get("Name"));
@@ -34,15 +37,13 @@ public class WorkerDao {
 		param.add(p.get("ADDR"));
 		param.add(p.get("SAL"));
 		param.add(p.get("CODE"));
-		
+
 		return jdbc.update(sql, param);
 	}
 
 	public Map<String, Object> selectAdmin(String workId, String password) {
-		String sql = "SELECT WORK_ID, PASS, code" +
-	                 " FROM PM_WK_T" +
-				     " WHERE WORK_ID = ?" +
-	                 " AND PASS = ?";
+		String sql = "SELECT WORK_ID, PASS, code" + " FROM PM_WORKER"
+				+ " WHERE WORK_ID = ?" + " AND PASS = ?";
 		List<Object> param = new ArrayList<>();
 		param.add(workId);
 		param.add(password);
@@ -50,7 +51,7 @@ public class WorkerDao {
 	}
 
 	public Map<String, Object> finduser(String string, Object userId) {
-		String sql = "SELECT * FROM PM_WK_T WHERE WORK_ID = ?";
+		String sql = "SELECT * FROM PM_WORKER WHERE WORK_ID = ?";
 		List<Object> param = new ArrayList<>();
 		param.add(userId);
 		return jdbc.selectOne(sql, param);
